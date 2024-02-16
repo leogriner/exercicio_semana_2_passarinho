@@ -1,0 +1,101 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;  }
+    </style>
+</head>
+<body>
+
+<script>
+
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+
+    scene: {
+        preload: preload, //tudo o que voce carrega antes do jogo 
+        create: create, //consegue pegar o preloaded e adiciona visao do programador
+        update: update //quando voce quer atualizar algo constantemente em alguma atualizacao
+    }
+};
+
+var game = new Phaser.Game(config);
+
+var passarinho;
+
+function preload() {
+    this.load.image('bg', 'assets/bg_space.png');
+    this.load.spritesheet('bird', 'assets/bird-purple.png', { frameWidth: 75, frameHeight: 75});
+}
+
+function create() {
+        this.add.image(400, 300, 'bg').setScale(1.2);
+        passarinho = this.add.sprite(100,50,'bird').setScale(1.3);
+
+        this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('bird',{ start: 0, end: 7}),
+            frameRate: 17.5,
+            repeat: -1
+        });
+
+        passarinho.anims.play('fly', true)
+}
+
+function update() { 
+if (passarinho.x === 100) {
+    passarinho.setFlip(false, false); // Inverte a imagem do passarinho horizontalmente e verticalmente se a posicao horizontal do passarinho for igual a 100
+    passarinho.ida = true;  // Define a variavel "ida" do passarinho como verdadeira
+}
+
+if (passarinho.x < 700 && passarinho.ida === true) {
+    console.log("o que acontece?");
+    passarinho.x += 5;  // desloca a posicao horizontal do passarinho em 5 unidades
+}
+
+if (passarinho.x === 700) {
+    passarinho.setFlip(true, false); // Inverte a imagem do passarinho horizontalmente se a posicao horizontal do passarinho for igual a 700
+    passarinho.ida = false;
+}
+
+if (passarinho.x > 100 && passarinho.ida === false) {
+    console.log("e o que acontece agora?");
+    passarinho.x -= 5; // Diminui a posicao horizontal do passarinho em 5 unidades
+}
+
+if (passarinho.y === 50) {
+    passarinho.subida = true; // passarinho.subida serve para a mesma funcao que passarinho.ida tem de impedir que o processo falhe e faça subir 
+}
+
+if (passarinho.y < 750 && passarinho.subida === true) {
+    console.log("o que acontece?");
+    passarinho.y += 1;  // sobe verticalmente do passarinho em 1 unidade
+}
+
+if (passarinho.y === 500) {
+    passarinho.subida = false; // Se a posicao vertical do passarinho for igual a 500 define a variavel "subida" do passarinho como falsa
+}
+
+if (passarinho.y > 0 && passarinho.subida === false) {
+    console.log("e o que acontece agora?");
+    passarinho.y -= 1;
+}
+
+}
+</script>
+
+</body>
+</html>
